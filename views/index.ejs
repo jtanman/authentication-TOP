@@ -1,24 +1,46 @@
-<h1>Users</h1>
-<p><a href="/sign-up">Sign Up</a></p>
-<% if (users && users.length > 0) { %>
-  <table border="1" cellpadding="5">
-    <thead>
-      <tr>
-        <% Object.keys(users[0]).forEach(function(key) { %>
-          <th><%= key %></th>
-        <% }); %>
-      </tr>
-    </thead>
-    <tbody>
-      <% users.forEach(function(user) { %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Log In</title>
+  </head>
+  <body>
+    <% if (locals.user) {%>
+    <h1>WELCOME BACK <%= user.username %></h1>
+    <a href="/log-out">LOG OUT</a>
+    <% } else { %>
+    <h1>please log in</h1>
+    <form action="/log-in" method="POST">
+      <label for="username">Username</label>
+      <input id="username" name="username" placeholder="username" type="text" />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" />
+      <button type="submit">Log In</button>
+    </form>
+    <%}%>
+    <p><a href="/sign-up">Sign Up</a></p>
+
+    <!-- <% if (users && users.length > 0) { %>
+    <table border="1" cellpadding="5">
+      <thead>
         <tr>
-          <% Object.values(user).forEach(function(value) { %>
-            <td><%= value %></td>
+          <% Object.keys(users[0]).forEach(function(key) { %>
+          <th><%= key %></th>
           <% }); %>
         </tr>
-      <% }); %>
-    </tbody>
-  </table>
-<% } else { %>
-  <p>No users found.</p>
-<% } %>
+      </thead>
+      <tbody>
+        <% users.forEach(function(user) { %>
+        <tr>
+          <% Object.values(user).forEach(function(value) { %>
+          <td><%= value %></td>
+          <% }); %>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+    <p>No users found.</p>
+    <% } %> -->
+  </body>
+</html>
