@@ -9,8 +9,9 @@ const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
 const port = 3000; // Define the port for the server
 
+const encodedPw = encodeURIComponent(process.env.SUPABASE_PW);
 const pool = new Pool({
-  connectionString: `postgresql://postgres.bfuxedgtnsqidizgwtbk:${process.env.SUPABASE_PW}@aws-0-us-west-1.pooler.supabase.com:6543/postgres`,
+  connectionString: `postgresql://postgres.bfuxedgtnsqidizgwtbk:${encodedPw}@aws-0-us-west-1.pooler.supabase.com:6543/postgres`,
 });
 
 const app = express();
@@ -21,7 +22,17 @@ app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => res.render("index"));
+app.get("/", async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM users');
+    res.render("index", { users: result.rows });
+  } catch (err) {
+    res.status(500).send("Database error: " + err.message);
+  }
+});
+
+const authRouter = require('./routes/auth');
+app.use('/', authRouter);
 
 // Start the server
 app.listen(port, () => {

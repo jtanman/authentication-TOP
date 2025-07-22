@@ -1,1 +1,23 @@
-np
+<h1>Users</h1>
+<% if (users && users.length > 0) { %>
+  <table border="1" cellpadding="5">
+    <thead>
+      <tr>
+        <% Object.keys(users[0]).forEach(function(key) { %>
+          <th><%= key %></th>
+        <% }); %>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(function(user) { %>
+        <tr>
+          <% Object.values(user).forEach(function(value) { %>
+            <td><%= value %></td>
+          <% }); %>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+<% } else { %>
+  <p>No users found.</p>
+<% } %>
