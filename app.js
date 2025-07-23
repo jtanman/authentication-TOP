@@ -8,7 +8,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const port = 3000; // Define the port for the server
 
 const encodedPw = encodeURIComponent(process.env.SUPABASE_PW);
@@ -36,9 +36,13 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      if (user.password !== password) {
+      
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        // passwords do not match!
         return done(null, false, { message: "Incorrect password" });
       }
+
       return done(null, user);
     } catch (err) {
       return done(err);
